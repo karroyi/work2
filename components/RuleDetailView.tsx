@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Rule } from '../types';
-import { X, Clock, User, FileText, ChevronRight, ArrowRightLeft } from 'lucide-react';
+import { X, Clock, User, FileText, ChevronRight, ArrowRightLeft, Target, Calculator, Database, Tag, MessageSquare } from 'lucide-react';
 
 interface RuleDetailViewProps {
   currentRule: Rule;
@@ -9,22 +9,61 @@ interface RuleDetailViewProps {
 
 // Helper component for consistent field display
 const Field = ({ label, value, className = "" }: { label: string, value: React.ReactNode, className?: string }) => (
-  <div className={`space-y-1 ${className}`}>
+  <div className={`space-y-1.5 ${className}`}>
     <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</div>
-    <div className="text-sm text-slate-800 font-medium break-words whitespace-pre-wrap leading-relaxed">
+    <div className="text-sm text-slate-800 font-medium break-words whitespace-pre-wrap leading-relaxed bg-slate-50/50 rounded p-2 border border-slate-100 min-h-[38px] flex items-center">
         {value || <span className="text-slate-300 italic">未填写</span>}
     </div>
   </div>
 );
 
-const SectionHeader = ({ title }: { title: string }) => (
-  <div className="pb-2 border-b border-slate-100 mb-4 mt-6 first:mt-0">
-    <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-      <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
+const SectionHeader = ({ title, icon: Icon }: { title: string, icon?: any }) => (
+  <div className="flex items-center gap-2 pb-2 border-b border-slate-100 mb-4 mt-8 first:mt-0">
+    {Icon && <Icon size={16} className="text-blue-600" />}
+    <h3 className="text-sm font-bold text-slate-800">
       {title}
     </h3>
   </div>
 );
+
+// Helper to generate consistent mock data based on rule
+const getMockExtendedData = (rule: Rule) => {
+    // Generate deterministic mock data based on rule properties
+    const isQuality = rule.dimension === '质量';
+    const isEfficiency = rule.dimension === '效率';
+    
+    return {
+        // Application Description
+        iterateContent: rule.version > 1 
+            ? `1. 调整了${rule.item2}的考核阈值，由原来的98%提升至98.5%。\n2. 优化了取数逻辑，排除了不可抗力因素导致的异常。` 
+            : '首次创建该规则，旨在规范业务操作标准。',
+        reason: rule.version > 1 
+            ? '原标准在实际执行中发现过于宽松，无法有效起到牵引作用，且业务场景发生了变化。' 
+            : '当前业务环节缺乏明确的管理标准，导致经常出现纠纷，急需制定规则进行管控。',
+        
+        // Traction
+        tractionMetric: isQuality ? '破损率' : (isEfficiency ? '及时率' : '违规率'),
+        tractionCurrent: isQuality ? '0.05%' : '92.3%',
+        tractionTargets: Array(12).fill(0).map((_, i) => isQuality ? `${(0.05 - (i * 0.002)).toFixed(3)}%` : `${(92.5 + (i * 0.2)).toFixed(1)}%`),
+        tractionLogic: `取自DWS层dws_ops_${isQuality ? 'quality' : 'perf'}_metric_day表，过滤条件：inc_day = T-1 AND org_id IN (相关组织) AND type = '${rule.item2}'`,
+        tractionTable: `dws_ops_${isQuality ? 'quality' : 'perf'}_metric_day`,
+        
+        // Calculation
+        calcAvgReward: '1,500',
+        calcAvgPenalty: '800',
+        calcLimitReward: '5,000',
+        calcLimitPenalty: '2,000',
+        calcFormula: 'IF(指标值 > 目标值, (指标值 - 目标值) * 100 * 系数, 0)',
+        calcFile: `2024年Q${Math.floor(Math.random() * 4) + 1}测算数据.xlsx`,
+        
+        // Online Logic
+        isOnline: true,
+        bdpTable: 'ads_award_penalty_detail_day',
+        onlineLogic: '1. 根据工号关联花名册获取岗位信息。\n2. 根据运单号关联产品类型。\n3. 剔除豁免名单中的记录。',
+        appliedPosition: rule.target.includes('收派') ? '收派员' : (rule.target.includes('司机') ? '干线司机' : '仓管员'),
+        appliedProduct: '标快, 特快, 电商标快',
+    };
+};
 
 export const RuleDetailView: React.FC<RuleDetailViewProps> = ({ currentRule, onClose }) => {
   const [historyRules, setHistoryRules] = useState<Rule[]>([]);
@@ -67,8 +106,10 @@ export const RuleDetailView: React.FC<RuleDetailViewProps> = ({ currentRule, onC
         </div>
     );
 
+    const extendedData = getMockExtendedData(rule);
+
     return (
-        <div className={`bg-white p-6 rounded-xl border ${isCurrent ? 'border-blue-100 shadow-sm' : 'border-slate-200 bg-slate-50/30'}`}>
+        <div className={`bg-white p-6 rounded-xl border ${isCurrent ? 'border-blue-100 shadow-sm ring-1 ring-blue-50' : 'border-slate-200 bg-slate-50/30'}`}>
             {/* Meta Info Header inside the card */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                 <div>
@@ -86,41 +127,96 @@ export const RuleDetailView: React.FC<RuleDetailViewProps> = ({ currentRule, onC
                 {isCurrent && <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">当前生效版本</span>}
             </div>
 
-            <SectionHeader title="基础信息" />
+            {/* 1. 规则基础信息 */}
+            <SectionHeader title="规则基础信息" icon={Tag} />
             <div className="grid grid-cols-2 gap-4 mb-6">
                 <Field label="奖罚层级" value={rule.rewardPenaltyLevel} />
                 <Field label="环节" value={rule.level} />
-                <Field label="维度" value={rule.dimension} />
-                <Field label="规则制定组织" value={rule.org} />
                 <Field label="一级事项" value={rule.item1} />
                 <Field label="二级事项" value={rule.item2} />
+                
+                <div className="col-span-2">
+                    <Field label="奖罚事项说明及取数逻辑" value={rule.logic} />
+                </div>
+
+                <div className="col-span-2 grid grid-cols-2 gap-4 p-3 bg-slate-50 rounded border border-slate-100">
+                    <Field label="新奖励规则" value={rule.rewardStd} className="bg-white" />
+                    <Field label="新扣罚规则" value={rule.penaltyStd} className="bg-white" />
+                </div>
+
                 <Field label="应用对象" value={rule.target} />
+                <Field label="规则制定组织" value={rule.org} />
                 <Field label="规则接口人" value={rule.owner} />
+                <Field label="规则制定人员" value={rule.creator} />
+                <Field label="首次应用时间" value={rule.firstApplyDate} />
             </div>
 
-            <SectionHeader title="逻辑与标准" />
+            {/* 2. 本次申请说明 */}
+            <SectionHeader title="本次申请说明" icon={MessageSquare} />
             <div className="space-y-4 mb-6">
-                <Field label="奖罚事项说明及取数逻辑" value={rule.logic} />
-                <Field label="奖励标准" value={rule.rewardStd} />
-                <Field label="扣罚标准" value={rule.penaltyStd} />
+                <Field label="迭代内容说明" value={extendedData.iterateContent} />
+                <Field label="迭代原因说明" value={extendedData.reason} />
             </div>
 
-            <SectionHeader title="牵引目标" />
+            {/* 3. 规则牵引目标 */}
+            <SectionHeader title="规则牵引目标" icon={Target} />
             <div className="grid grid-cols-2 gap-4 mb-6">
-                 <Field label="牵引指标名称" value="全网遗失率(Mock)" />
-                 <Field label="指标当前值" value="0.01%" />
+                 <Field label="牵引指标名称" value={extendedData.tractionMetric} />
+                 <Field label="指标当前值" value={extendedData.tractionCurrent} />
+                 
                  <div className="col-span-2">
-                    <Field label="线上化取数逻辑" value="基于DWS_001表统计..." />
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">指标目标值 (1-12月)</div>
+                    <div className="grid grid-cols-6 gap-1">
+                        {extendedData.tractionTargets.map((val, i) => (
+                            <div key={i} className="bg-slate-50 border border-slate-100 rounded text-[10px] text-center py-1 text-slate-600 font-medium">
+                                {val}
+                            </div>
+                        ))}
+                    </div>
+                 </div>
+
+                 <div className="col-span-2">
+                    <Field label="线上化取数逻辑" value={extendedData.tractionLogic} />
+                 </div>
+                 <div className="col-span-2">
+                    <Field label="取数底表" value={extendedData.tractionTable} />
                  </div>
             </div>
 
-            <SectionHeader title="测算数据" />
-             <div className="grid grid-cols-2 gap-4">
-                 <Field label="月均奖励" value="¥12,000" />
-                 <Field label="月均扣罚" value="¥3,500" />
+            {/* 4. 规则测算数据 */}
+            <SectionHeader title="规则测算数据" icon={Calculator} />
+             <div className="grid grid-cols-2 gap-4 mb-6">
+                 <Field label="月均奖励金额" value={extendedData.calcAvgReward} />
+                 <Field label="月均扣罚金额" value={extendedData.calcAvgPenalty} />
+                 <Field label="极限奖励金额" value={extendedData.calcLimitReward} />
+                 <Field label="极限扣罚金额" value={extendedData.calcLimitPenalty} />
                  <div className="col-span-2">
-                    <Field label="计算公式" value="Rewards = Base * (1 + Rate)..." />
+                    <Field label="金额计算公式或计算逻辑" value={extendedData.calcFormula} />
                  </div>
+                 <div className="col-span-2">
+                    <Field label="测算数据明细" value={extendedData.calcFile} />
+                 </div>
+            </div>
+
+            {/* 5. 奖罚金额线上化取数逻辑 */}
+            <SectionHeader title="奖罚金额线上化取数逻辑" icon={Database} />
+            <div className="space-y-4">
+                <div className="flex items-center gap-3 p-3 bg-blue-50/50 rounded border border-blue-100">
+                    <span className="text-xs font-bold text-slate-600">是否可以线上化:</span>
+                    <span className="text-xs font-medium text-blue-700 bg-white px-2 py-0.5 rounded border border-blue-200">
+                        {extendedData.isOnline ? '是' : '否'}
+                    </span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="col-span-2">
+                        <Field label="BDP表" value={extendedData.bdpTable} />
+                    </div>
+                    <div className="col-span-2">
+                        <Field label="取数逻辑" value={extendedData.onlineLogic} />
+                    </div>
+                    <Field label="应用岗位" value={extendedData.appliedPosition} />
+                    <Field label="应用产品" value={extendedData.appliedProduct} />
+                </div>
             </div>
         </div>
     );
@@ -151,7 +247,7 @@ export const RuleDetailView: React.FC<RuleDetailViewProps> = ({ currentRule, onC
 
       {/* Main Content - Scrollable */}
       <div className="flex-1 overflow-y-auto p-6">
-         <div className="max-w-7xl mx-auto">
+         <div className="max-w-[1600px] mx-auto">
              {/* Comparison Header Controls */}
              <div className="flex items-center mb-6">
                  <div className="flex-1">
@@ -163,7 +259,7 @@ export const RuleDetailView: React.FC<RuleDetailViewProps> = ({ currentRule, onC
                  <div className="flex-1 flex items-center justify-between">
                      <h3 className="text-sm font-semibold text-slate-700">历史版本对比</h3>
                      <select 
-                        className="form-select text-xs border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1.5 pl-2 pr-8 w-40"
+                        className="form-select text-xs border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-2 pr-8 w-40 hover:border-slate-400 transition-colors"
                         value={selectedVersionId}
                         onChange={(e) => setSelectedVersionId(e.target.value)}
                         disabled={historyRules.length === 0}

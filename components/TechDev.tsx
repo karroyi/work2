@@ -66,7 +66,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
 
         {/* Level Filter */}
         <select 
-          className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+          className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
           value={levelFilter}
           onChange={(e) => setLevelFilter(e.target.value)}
         >
@@ -81,7 +81,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
 
         {/* Type Filter */}
         <select 
-          className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+          className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
@@ -92,7 +92,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
 
         {/* Online Filter */}
         <select 
-          className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+          className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
           value={onlineFilter}
           onChange={(e) => setOnlineFilter(e.target.value)}
         >
@@ -103,7 +103,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
 
         {/* Dev Status Filter */}
         <select 
-          className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+          className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
           value={devStatusFilter}
           onChange={(e) => setDevStatusFilter(e.target.value)}
         >
@@ -118,7 +118,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
         <input 
           type="text" 
           placeholder="研发人" 
-          className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-32"
+          className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-32 hover:border-slate-400 transition-colors"
           value={devOwnerKeyword}
           onChange={(e) => setDevOwnerKeyword(e.target.value)}
         />
@@ -127,7 +127,7 @@ export const TechDev: React.FC<TechDevProps> = ({ applications, onUpdateStatus, 
         <input 
           type="text" 
           placeholder="二级事项 / 需求描述" 
-          className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-48"
+          className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-48 hover:border-slate-400 transition-colors"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />

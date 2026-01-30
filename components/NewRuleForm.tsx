@@ -19,7 +19,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     ruleId: '', // Track original rule ID for iterations
-    type: mode === 'iterate' ? 'Iterate' : '',
+    type: mode === 'iterate' ? 'Iterate' : 'New',
     level: '', 
     rewardPenaltyLevel: '',
     dimension: '',
@@ -71,7 +71,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
         target: initialData.target || '',
         org: initialData.org || '',
         owner: initialData.owner || '',
-        type: mode === 'iterate' ? 'Iterate' : (initialData.type || ''),
+        type: mode === 'iterate' ? 'Iterate' : (initialData.type || 'New'),
         reason: initialData.reason || '',
         tractionMetric: initialData.tractionMetric || '',
         tractionCurrent: initialData.tractionCurrent || '',
@@ -168,9 +168,10 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
     </label>
   );
 
-  const inputClass = "block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 text-slate-900 placeholder:text-slate-400 transition-shadow";
-  const selectClass = "block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 text-slate-900 transition-shadow";
-  const textareaClass = "block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 text-slate-900 placeholder:text-slate-400 min-h-[100px] resize-y transition-shadow";
+  // Enhanced styles for better visibility
+  const inputClass = "block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-900 placeholder:text-slate-400 hover:border-slate-400 transition-colors";
+  const selectClass = "block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-900 hover:border-slate-400 transition-colors";
+  const textareaClass = "block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-900 placeholder:text-slate-400 min-h-[100px] resize-y hover:border-slate-400 transition-colors";
 
   return (
     <div className="flex flex-col h-full bg-slate-50">
@@ -189,19 +190,8 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
           </div>
           
           <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-            <div>
-              <InputLabel label="类型" required />
-              <select 
-                className={selectClass}
-                onChange={(e) => handleChange('type', e.target.value)}
-                value={formData.type}
-                disabled={mode === 'iterate'} // Lock type if iterating
-              >
-                <option value="">请选择申请类型</option>
-                <option value="New">新增</option>
-                <option value="Iterate">迭代</option>
-              </select>
-            </div>
+            
+            {/* Removed Type Select Field */}
             
             <div>
               <InputLabel label="奖罚层级" required />
@@ -252,7 +242,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
               <InputLabel label="奖罚事项说明及取数逻辑" required />
               <textarea className={textareaClass}
                 value={formData.logic} onChange={(e) => handleChange('logic', e.target.value)}
-                placeholder="详细描述逻辑..."
+                placeholder="详细描述规则的触发条件、逻辑判断及数据来源..."
               ></textarea>
             </div>
 
@@ -260,8 +250,8 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
               <div>
                   <InputLabel label="新奖励规则" required />
                   <textarea 
-                    className={`${textareaClass} bg-white`} 
-                    placeholder="描述奖励标准..."
+                    className={textareaClass} 
+                    placeholder="描述具体的奖励标准（如：奖励金额、积分等）..."
                     value={formData.rewardRule}
                     onChange={(e) => handleChange('rewardRule', e.target.value)}
                   ></textarea>
@@ -270,8 +260,8 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
               <div>
                   <InputLabel label="新扣罚规则" required />
                   <textarea 
-                    className={`${textareaClass} bg-white`} 
-                    placeholder="描述扣罚标准..."
+                    className={textareaClass} 
+                    placeholder="描述具体的扣罚标准（如：扣罚金额、绩效分等）..."
                     value={formData.penaltyRule}
                     onChange={(e) => handleChange('penaltyRule', e.target.value)}
                   ></textarea>
@@ -281,7 +271,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
             <div>
               <InputLabel label="应用对象" required />
               <input 
-                type="text" className={inputClass} placeholder="如：业务区、中转场" 
+                type="text" className={inputClass} placeholder="如：业务区、中转场、收派员" 
                 value={formData.target} onChange={(e) => handleChange('target', e.target.value)}
               />
             </div>
@@ -298,7 +288,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 className={selectClass}
                 value={formData.owner} onChange={(e) => handleChange('owner', e.target.value)}
               >
-                <option value="">请选择</option>
+                <option value="">请选择规则接口人</option>
                 <option value="张三 (Z001)">张三 (Z001)</option>
                 <option value="王强">王强</option>
                 <option value="邹思琦">邹思琦</option>
@@ -311,7 +301,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
             <div>
               <InputLabel label="规则制定人员" required />
               <select className={selectClass}>
-                <option>请选择</option>
+                <option>请选择规则制定人员</option>
                 <option>李四 (L002)</option>
                 <option>当前用户</option>
               </select>
@@ -380,6 +370,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass}
+                  placeholder="请输入当前指标值，如：98.5%"
                   value={formData.tractionCurrent}
                   onChange={(e) => handleChange('tractionCurrent', e.target.value)}
                 />
@@ -393,7 +384,8 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                             <span className="text-xs text-slate-500 text-center">{idx + 1}月</span>
                             <input 
                                 type="text" 
-                                className="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-1 py-1 text-center"
+                                className="block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm px-1 py-1.5 text-center transition-colors hover:border-slate-400"
+                                placeholder="目标"
                                 value={val}
                                 onChange={(e) => handleTargetChange(idx, e.target.value)}
                             />
@@ -406,6 +398,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <InputLabel label="线上化取数逻辑" required />
                 <textarea 
                   className={textareaClass}
+                  placeholder="请详细描述该指标的数据来源和计算口径..."
                   value={formData.tractionLogic}
                   onChange={(e) => handleChange('tractionLogic', e.target.value)}
                 ></textarea>
@@ -416,6 +409,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass}
+                  placeholder="请输入数据底表名称"
                   value={formData.tractionTable}
                   onChange={(e) => handleChange('tractionTable', e.target.value)}
                 />
@@ -438,6 +432,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass} 
+                  placeholder="请输入金额，如：1000"
                   value={formData.calcAvgReward}
                   onChange={(e) => handleChange('calcAvgReward', e.target.value)}
                 />
@@ -447,6 +442,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass}
+                  placeholder="请输入金额，如：500"
                   value={formData.calcAvgPenalty}
                   onChange={(e) => handleChange('calcAvgPenalty', e.target.value)}
                 />
@@ -456,6 +452,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass} 
+                  placeholder="请输入金额，如：5000"
                   value={formData.calcLimitReward}
                   onChange={(e) => handleChange('calcLimitReward', e.target.value)}
                 />
@@ -465,6 +462,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <input 
                   type="text" 
                   className={inputClass}
+                  placeholder="请输入金额，如：2000"
                   value={formData.calcLimitPenalty}
                   onChange={(e) => handleChange('calcLimitPenalty', e.target.value)}
                 />
@@ -474,6 +472,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <InputLabel label="金额计算公式或计算逻辑" required />
                 <textarea 
                   className={textareaClass}
+                  placeholder="请详细描述金额的计算公式..."
                   value={formData.calcFormula}
                   onChange={(e) => handleChange('calcFormula', e.target.value)}
                 ></textarea>
@@ -530,7 +529,7 @@ export const NewRuleForm: React.FC<NewRuleFormProps> = ({
                 <>
                     <div>
                       <InputLabel label="BDP表" required />
-                      <input type="text" className={inputClass} placeholder="输入数据表名" />
+                      <input type="text" className={inputClass} placeholder="请输入BDP数据表名" />
                     </div>
 
                     <div>

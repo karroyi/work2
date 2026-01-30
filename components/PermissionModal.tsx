@@ -49,10 +49,11 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({ rule, onClose,
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">规则制定人</label>
                         <select 
-                            className="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 text-slate-900"
+                            className="block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-900 hover:border-slate-400 transition-colors"
                             value={creator}
                             onChange={(e) => setCreator(e.target.value)}
                         >
+                            <option value="">请选择规则制定人</option>
                             {USERS.map(u => <option key={u} value={u}>{u}</option>)}
                         </select>
                     </div>
@@ -60,10 +61,11 @@ export const PermissionModal: React.FC<PermissionModalProps> = ({ rule, onClose,
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">规则接口人</label>
                         <select 
-                            className="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 text-slate-900"
+                            className="block w-full rounded-md border border-slate-300 bg-white shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-900 hover:border-slate-400 transition-colors"
                             value={owner}
                             onChange={(e) => setOwner(e.target.value)}
                         >
+                            <option value="">请选择规则接口人</option>
                             {USERS.map(u => <option key={u} value={u}>{u}</option>)}
                         </select>
                     </div>

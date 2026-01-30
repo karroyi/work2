@@ -63,7 +63,7 @@ export const PendingRelease: React.FC<PendingReleaseProps> = ({ applications, on
             </div>
 
             <select 
-              className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+              className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
               value={levelFilter}
               onChange={(e) => setLevelFilter(e.target.value)}
             >
@@ -77,7 +77,7 @@ export const PendingRelease: React.FC<PendingReleaseProps> = ({ applications, on
             </select>
 
             <select 
-              className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 pl-3 pr-8"
+              className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
             >
@@ -89,14 +89,14 @@ export const PendingRelease: React.FC<PendingReleaseProps> = ({ applications, on
             <input 
               type="text" 
               placeholder="搜索规则编码 / 内容关键词" 
-              className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-64"
+              className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-64 hover:border-slate-400 transition-colors"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
              <input 
               type="text" 
               placeholder="创建人工号" 
-              className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-40"
+              className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-40 hover:border-slate-400 transition-colors"
               value={creatorKeyword}
               onChange={(e) => setCreatorKeyword(e.target.value)}
             />

@@ -112,7 +112,7 @@ export const MyRules: React.FC<MyRulesProps> = ({
             </div>
             
             <select 
-              className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1.5 pl-3 pr-8"
+              className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
               value={levelFilter}
               onChange={(e) => setLevelFilter(e.target.value)}
             >
@@ -125,7 +125,7 @@ export const MyRules: React.FC<MyRulesProps> = ({
               <option>司机岗</option>
             </select>
             <select 
-              className="form-select text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1.5 pl-3 pr-8"
+              className="form-select text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 pl-3 pr-8 hover:border-slate-400 transition-colors"
               value={dimensionFilter}
               onChange={(e) => setDimensionFilter(e.target.value)}
             >
@@ -140,21 +140,21 @@ export const MyRules: React.FC<MyRulesProps> = ({
             <input 
               type="text" 
               placeholder="二级事项关键词" 
-              className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-40"
+              className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-40 hover:border-slate-400 transition-colors"
               value={itemKeyword}
               onChange={(e) => setItemKeyword(e.target.value)}
             />
              <input 
               type="text" 
               placeholder="标准关键词" 
-              className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-48"
+              className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-48 hover:border-slate-400 transition-colors"
               value={stdKeyword}
               onChange={(e) => setStdKeyword(e.target.value)}
             />
             <input 
               type="text" 
               placeholder="制定人" 
-              className="form-input text-sm border-slate-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5 px-3 w-32"
+              className="form-input text-sm border border-slate-300 bg-white rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-1.5 px-3 w-32 hover:border-slate-400 transition-colors"
               value={creatorKeyword}
               onChange={(e) => setCreatorKeyword(e.target.value)}
             />
